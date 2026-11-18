@@ -1,0 +1,3 @@
+# Everything needed to run both services and the local demo in one environment
+-r data_api/requirements.txt
+-r mcp_connector/requirements.txt

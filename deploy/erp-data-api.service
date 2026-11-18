@@ -1,0 +1,29 @@
+# /etc/systemd/system/erp-data-api.service
+[Unit]
+Description=zOrder ERP Data API
+After=network.target
+
+[Service]
+User=CHANGE_ME_LINUX_USER
+WorkingDirectory=/opt/erp-connector/data_api
+EnvironmentFile=/opt/erp-connector/data_api/.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/erp-connector/data_api/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8820 --workers 2 --root-path /erp-api --proxy-headers
+Restart=always
+RestartSec=5
+
+# Hardening (the Data API writes nothing to disk)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

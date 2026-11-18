@@ -1,0 +1,9 @@
+{
+  "instances": {
+    "PASTE_INSTANCE_ID_FROM_LOGIN_RESPONSE": {
+      "name": "zOrder Testing",
+      "connection_string": "Data Source=SQLHOST,1433;Initial Catalog=ClientDb;User ID=erp_readonly;Password=CHANGE_ME;",
+      "tokens": ["PASTE_Z_AUTH_TOKEN_FOR_TESTING"]
+    }
+  }
+}

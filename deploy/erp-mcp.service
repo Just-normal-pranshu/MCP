@@ -1,0 +1,32 @@
+# /etc/systemd/system/erp-mcp.service
+[Unit]
+Description=zOrder ERP MCP connector
+After=network.target
+
+[Service]
+User=CHANGE_ME_LINUX_USER
+WorkingDirectory=/opt/erp-connector/mcp_connector
+EnvironmentFile=/opt/erp-connector/mcp_connector/.env
+# Encryption key kept apart from the data and its backups (root:root 600, read by systemd before start)
+EnvironmentFile=-/etc/erp-mcp/secret.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/erp-connector/mcp_connector/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8810 --proxy-headers --workers 1
+Restart=always
+RestartSec=5
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/erp-mcp
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
