@@ -87,7 +87,7 @@ def register_tools(mcp: MCPServer, store: Store, data: DataApiClient) -> None:
 
     @mcp.tool(annotations=READ_ONLY)
     def erp_list_companies() -> dict:
-        """List the companies this admin can read. Use erp_switch_company to change the active one."""
+        """List the companies this admin can read, with their index and which one is active."""
         s = session()
         return {"companies": [{"index": n, "name": i["name"], "active": i["id"] == s.selected_instance_id}
                               for n, i in enumerate(s.instances)]}
@@ -95,7 +95,7 @@ def register_tools(mcp: MCPServer, store: Store, data: DataApiClient) -> None:
     @mcp.tool(annotations=ToolAnnotations(read_only_hint=True, destructive_hint=False, idempotent_hint=True,
                                           open_world_hint=False))
     def erp_switch_company(
-        company_name: Annotated[str, Field(description="Company name (or part of it), or its index from erp_list_companies")],
+        company_name: Annotated[str, Field(description="Company name (or part of it), or its index in the company list")],
     ) -> dict:
         """Change the active company for all following questions. Only changes this connector session."""
         s = session()
